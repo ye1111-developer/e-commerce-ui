@@ -1,12 +1,25 @@
-import { useState, useContext, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { ProductContext } from "../App";
+
 export const Details = () => {
-  const { products, setProducts } = useContext(ProductContext);
+  const { detailProduct, setDetailProduct } = useState(null);
 
   const { userId } = useParams();
+  useEffect(() => {
+    const detailFetch = async () => {
+      try {
+        const response = await fetch(
+          `https://fakestoreapi.com/products/${userId}`,
+        );
+        const data = await response.json();
+        setDetailProduct(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    detailFetch();
+  }, [userId]);
 
-  const detailProduct = products.find((item) => item.id === Number(userId));
   return (
     <section className="flex items-center justify-center min-h-screen">
       <div
